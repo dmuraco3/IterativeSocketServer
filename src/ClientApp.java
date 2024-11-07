@@ -98,7 +98,7 @@ class RequestThread implements Runnable {
 
     public void run() {
         try {
-            System.out.println("Running socket: " + this.thread.threadId());
+            System.out.println("Running socket: " + this.thread.getId());
             BufferedReader in;
             DataOutputStream out;
             try (Socket socket = new Socket(this.ipAddr, this.port)) {
@@ -108,7 +108,7 @@ class RequestThread implements Runnable {
 
             long startTime = System.currentTimeMillis();
             out.writeUTF(cmd);
-            String _response = String.join("\n", in.lines().toList());
+            String _response = String.join("\n", (String[]) in.lines().toArray());
             long endTime = System.currentTimeMillis();
 
             this.elapsedTime = endTime - startTime;
