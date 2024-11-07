@@ -29,15 +29,29 @@ public class ClientApp {
         System.out.println("Select option to request from server: ");
         choice = scnr.nextInt();
 
-        cmd = switch (choice) {
-            case 1 -> "datetime";
-            case 2 -> "uptime";
-            case 3 -> "memuse";
-            case 4 -> "netstat";
-            case 5 -> "curusr";
-            case 6 -> "proc";
-            default -> cmd;
-        };
+        switch (choice) {
+            case 1:
+                cmd = "datetime";
+                break;
+            case 2:
+                cmd = "uptime";
+                break;
+            case 3:
+                cmd = "memuse";
+                break;
+            case 4:
+                cmd = "netstat";
+                break;
+            case 5:
+                cmd = "curusr";
+                break;
+            case 6:
+                cmd = "proc";
+                break;
+            default:
+                cmd = cmd;
+                break;
+        }
 
         System.out.println("Enter the number of request you would like to make (1, 5, 10, 15, 20 or 25): ");
         numThreads = scnr.nextInt();
