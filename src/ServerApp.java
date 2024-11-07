@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ServerApp {
     public static void main(String[] args) {
@@ -36,8 +37,7 @@ class Server {
             Socket socket = this.serverSocket.accept();
             System.out.println("Accepted a socket connection from " + socket.getRemoteSocketAddress());
 
-            DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
+            DataInputStream in = new DataInputStream(socket.getInputStream());
             String line = in.readUTF();
 
             System.out.println("Received command: " + line);
@@ -54,9 +54,9 @@ class Server {
     }
 
     private void reply(Socket socket, String reply_out) throws IOException {
-        OutputStream output = socket.getOutputStream();
-        PrintWriter writer = new PrintWriter(output, true);
-        writer.println(reply_out);
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        out.writeUTF(reply_out);
+        out.close();
     }
 
     private String runClientCommand(String cmd) throws Exception {

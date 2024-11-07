@@ -98,20 +98,24 @@ class RequestThread implements Runnable {
 
     public void run() {
         try {
-            System.out.println("Running socket: " + this.thread.getId());
-            BufferedReader in;
-            DataOutputStream out;
-            try (Socket socket = new Socket(this.ipAddr, this.port)) {
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new DataOutputStream(socket.getOutputStream());
-            }
+            System.out.println("Running thread: " + this.thread.getId());
+            Socket socket = new Socket(this.ipAddr, this.port);
 
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+            // START timing block
             long startTime = System.currentTimeMillis();
             out.writeUTF(cmd);
-            String _response = String.join("\n", (String[]) in.lines().toArray());
+
+            String _response = in.readUTF();
             long endTime = System.currentTimeMillis();
+            // END timing block
+
+            socket.close();
 
             this.elapsedTime = endTime - startTime;
+            System.out.printf("Turn-around time for socket on thread #%d: %dms \n",this.thread.getId(), this.elapsedTime);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
