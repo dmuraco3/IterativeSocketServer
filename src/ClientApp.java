@@ -4,11 +4,10 @@ import java.util.Scanner;
 
 public class ClientApp {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
         String ipAddr;
         int port, choice, numThreads;
-        String hold;
         String cmd = "";
 
 
@@ -49,7 +48,6 @@ public class ClientApp {
                 cmd = "proc";
                 break;
             default:
-                cmd = cmd;
                 break;
         }
 
@@ -108,7 +106,8 @@ class RequestThread implements Runnable {
             long startTime = System.currentTimeMillis();
             out.writeUTF(cmd);
 
-            String _response = in.readUTF();
+            String response = in.readUTF();
+            System.out.printf("thread #%d got the following response: \n\t%s\n",this.thread.getId(),response);
             long endTime = System.currentTimeMillis();
             // END timing block
 

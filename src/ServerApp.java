@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class ServerApp {
     public static void main(String[] args) {
@@ -12,36 +11,34 @@ public class ServerApp {
             server.startServer();
         } catch (IOException e) {
             System.err.println("Error starting the server: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
 
 class Server {
-    private int port;
-    private ServerSocket serverSocket;
+    private final int port;
 
     public Server(int port) {
         this.port = port;
     }
 
     public void startServer() throws IOException {
-        this.serverSocket = new ServerSocket(this.port);
+        ServerSocket serverSocket = new ServerSocket(this.port);
 
-        String header = "Now listening for connections on " + this.serverSocket.getInetAddress().getHostAddress() + ":" + this.serverSocket.getLocalPort();
+        String header = "Now listening for connections on " + serverSocket.getInetAddress().getHostAddress() + ":" + serverSocket.getLocalPort();
         System.out.println(header);
         System.out.println("_".repeat(header.length()));
         System.out.println();
 
         while (true) {
-            Socket socket = this.serverSocket.accept();
+            Socket socket = serverSocket.accept();
             System.out.println("Accepted a socket connection from " + socket.getRemoteSocketAddress());
 
             DataInputStream in = new DataInputStream(socket.getInputStream());
             String line = in.readUTF();
 
             System.out.println("Received command: " + line);
-            String cmd_output = null;
+            String cmd_output;
             try {
                 cmd_output = runClientCommand(line);
                 reply(socket, cmd_output);
@@ -112,7 +109,6 @@ class Server {
                 output.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
             output.append("Error executing command: ").append(e.getMessage());
         }
         return output.toString().trim();
